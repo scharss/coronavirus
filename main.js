@@ -16,7 +16,7 @@ function showPosition(position) {
 
 
     //**********************************************
-    var map = L.map('mapContainer').setView([lat, long], 15);
+    var map = L.map('mapContainer').setView([lat, long], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

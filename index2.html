@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130429672-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-130429672-1');
+    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Scharss</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+    <style>
+        #mapContainer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+        }
+        
+        div.leaflet-bar {
+            text-align: center;
+        }
+    </style>
+
+    <style>
+        /*.timer__item {
+      display: inline-block;
+      text-align: center;
+  }
+  
+  .timer__item+.timer__item {
+      margin-left: 10px;
+  }
+  
+  .timer__value,
+  .timer__label {
+      display: block;
+  }
+  
+  .timer__value {
+      font-size: 15px;
+  }
+  
+  timer__label {
+      font-size: 5px;
+  }*/
+    </style>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/caja.css">
+    <script src="js/index2.js"></script>
+    <script src="js/caja.js"></script>
+
+
+
+
+
+
+
+
+
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="main.js"></script>
+
+</head>
+
+<body onload="getLocation()">
+
+
+
+    <div id="mapContainer"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+
+
+                <div id="basemaps-wrapper" class="leaflet-bar">
+
+
+                    <div id="js-timer" class="timer" role="timer" aria-label="A timer, counting down to {{eventName}}" data-endtime="2019-10-27 00:00:00">
+
+                        <strong><p>Infectados</p></strong>
+                        <button onclick="mostrar()" class="btn btn-primary">Consolidado</button>
+
+                        <br><br>
+                        <section id="s1" class="hidden">
+                            <section><button onclick="ocultar()" class="btn btn-secondary">Ocultar</button></section>
+                            <!--<iframe width="355" height="271" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTZaSd3yVNKt2vwAkvhROjhUnjuuGLHCWwF2_oW7KEcZKegqPJ8TlkvWWigpD_x4AkIqVuMIHyLIMwm/pubchart?oid=1937236165&amp;format=interactive"></iframe> -->
+                            <!-- <iframe width="300" height="330" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTZaSd3yVNKt2vwAkvhROjhUnjuuGLHCWwF2_oW7KEcZKegqPJ8TlkvWWigpD_x4AkIqVuMIHyLIMwm/pubchart?oid=849579008&amp;format=interactive"></iframe> -->
+                            <iframe width="209.5" height="233.36708860759492" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTZaSd3yVNKt2vwAkvhROjhUnjuuGLHCWwF2_oW7KEcZKegqPJ8TlkvWWigpD_x4AkIqVuMIHyLIMwm/pubchart?oid=505448252&amp;format=interactive"></iframe>
+
+
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <!--****************************************************-->
+
+
+
+
+
+
+            <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+            <script>
+                //*********************************************
+
+
+
+
+
+                //**********************************************
+
+
+
+
+
+                var redicon = L.icon({
+                    iconUrl: 'img/covidx.png ',
+
+
+                    iconSize: [58, 70], // size of the icon
+                    shadowSize: [50, 64], // size of the shadow
+                    iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+                    shadowAnchor: [4, 62], // the same for the shadow
+                    popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+                });
+
+
+                var sospechon = L.icon({
+                    iconUrl: 'img/sospechosox.png ',
+
+
+                    iconSize: [68, 80], // size of the icon
+                    shadowSize: [50, 64], // size of the shadow
+                    iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+                    shadowAnchor: [4, 62], // the same for the shadow
+                    popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+                });
+
+
+
+
+                var marcas = L.marker([3.5169756, -76.3050126], {
+                        icon: redicon
+                    }).addTo(map)
+                    .bindPopup('<img src="img/merkel.jpg" width="100"/>Infectado, Nombre edad, Genero <a href="graficasjorgearmandosantos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas </a>'),
+
+
+
+                    marcas2 = L.marker([3.5056186, -76.3032138], {
+                        icon: sospechon
+                    }).addTo(map)
+                    .bindPopup('<img src="img/obama.png" width="100"/>Sospechoso, Nombre, Edad, Genero <a href="graficasjorgearmandosantos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas </a>');
+
+                marcas4 = L.marker([3.5430303, -76.2907335], {
+                        icon: sospechon
+                    }).addTo(map)
+                    .bindPopup('<img src="img/trump.png" width="100"/>Sospechoso, Nombre Edad, Genero,  <a href="graficasjorgearmandosantos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas </a>');
+
+                //   marcas5 = L.marker([3.5277403,-76.3128736], {
+                //          icon: redicon
+                //    }).addTo(map)
+                //     .bindPopup('<img src="2.jpg" width="100"/>LEONARDO POSADA ANDRADE, Dirección: CALLE 44 #6EA-18 , Barrio: GUAYABAL, Comuna: 5 Teléfono: 3134250422, Correo: leonardo.posada@christus.co <a href=\"graficos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas </a>');
+
+                marcas6 = L.marker([3.5199186, -76.3132138], {
+                        icon: redicon
+                    }).addTo(map)
+                    .bindPopup('<img src="img/covidx.png " width="100"/>Infectado, Nombre, Edad, Genero, <a href="graficasjorgearmandosantos.html" target=\"_blank\" title=\"Opens in a new window\">Ver Estadísticas </a>');
+
+                marcas7 = L.marker([3.52212, -76.288904], {
+                        icon: redicon
+                    }).addTo(map)
+                    .bindPopup('<img src="img/randpaul.png" width="100"/>Infectado, Nombre Edad Genero<a href=\"graficos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas </a>');
+
+                //  marcas8 = L.marker([3.50212, -76.3026989], {
+                //   icon: redicon
+                //   }).addTo(map)
+                //   .bindPopup('<img src="img/randpaul.png width="100"/>nfectado, Nombre, Edad, Genero <a href=\"graficos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas </a>');
+
+
+                marcas9 = L.marker([3.51111, -76.3126989], {
+                        icon: sospechon
+                    }).addTo(map)
+                    .bindPopup('<img src="img/trump.png" width="100"/>Sospechoso, Nombre, Edad, Genero <a href=\"graficos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas </a>');
+
+
+                marcas10 = L.marker([3.51111, -76.3216989], {
+                        icon: redicon
+                    }).addTo(map)
+                    .bindPopup('<img src="img/randpaul.png" width="100"/>Infectado, Nombre, Edad, Genero <a href=\"graficos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas </a>');
+
+
+
+                // var cities = L.layerGroup([marcas, marcas2, marcas4, marcas5]);
+
+                //var marcas3 = L.marker([3.52212, -76.288904]).addTo(map)
+                // .bindPopup('<img src="1m.jpg" width="100"/>Responsable: Lider de la Comunidad responsable de organización y covocatorias<a href=\"graficos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas </a>'),
+
+
+                //marcas7 = L.marker([3.52332, -76.296904]).addTo(map)
+                //.bindPopup('<img src="2h.jpg" width="100"/>Responsable: Lider de la Comunidad responsable de organización y covocatorias <a href=\"graficos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas </a>'),
+
+                //marcas8 = L.marker([3.52823844, -76.2984856]).addTo(map)
+                //.bindPopup('<img src="1h.jpg" width="100"/>Responsable: Lider de la Comunidad responsable de organización y covocatorias<a href=\"graficos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas </a>');
+                //var cities2 = L.layerGroup([marcas3, marcas7, marcas8]);
+
+                /*var polygon = L.polygon([
+  [3.52423844,-76.2894856],
+  [3.5332,-76.297904],
+  [3.5212,-76.289904]],{
+  color: 'red',
+  fillColor: '#f03',
+  fillOpacity: 0.5,
+  
+}).addTo(map).bindPopup('<img src="22.png" width="100"/>Competencia Palmira es un municipio colombiano del departamento del Valle del Cauca en Colombia; localizado en la región sur del departamento. Es conocido como La Villa de las Palmas<a href=\"https://scharss.github.io/" target=\"_blank\" title=\"Opens in a new window\">Ir aquí</a>'),*/
+
+                /*var circle = L.circle([3.5347057, -76.2886028], {
+                        color: 'red',
+                        fillColor: '#f03',
+                        fillOpacity: 0.5,
+                        radius: 500
+                    }).addTo(map).bindPopup('<img src="22.png" width="100"/>Sin líder<a href=\"graficos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas</a>'),
+
+                    circle2 = L.circle([3.5509752, -76.3096519], {
+                        color: 'red',
+                        fillColor: '#f03',
+                        fillOpacity: 0.5,
+                        radius: 500
+                    }).addTo(map).bindPopup('<img src="22.png" width="100"/>Sin Líder<a href=\"graficos.html" target=\"_blank\" title=\"Opens in a new window\">Estadísticas</a>');
+
+                var competenciax = L.layerGroup([circle, circle2]); */
+
+
+                // var overlayMaps = {
+                // "Candidato A": cities,
+
+                // "Candidato B": cities2,
+                // "Sin Líder": competenciax
+
+
+
+                //};
+
+
+
+                //L.control.layers(overlayMaps).addTo(map);
+            </script>
+
+
+            <!--Botones-->
+            <script>
+                function ocultar() {
+                    document.getElementById("s1").style.display = "none";
+                }
+
+                function mostrar() {
+                    document.getElementById("s1").style.display = "block";
+                }
+            </script>
+
+
+            <script src="js/timer.js"></script>
+            <script>
+                (function() {
+                    Timer.start({
+                        'timer': document.getElementById('js-timer'),
+                        'endtime': document.getElementById('js-timer').getAttribute('data-endtime')
+                    });
+                })();
+            </script>
+
+
+
+
+
+
+
+
+
+            <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+
+
+
+
+
+
+            <!--*********************************************************************************-->
+
+
+
+
+</body>
+
+</html>
